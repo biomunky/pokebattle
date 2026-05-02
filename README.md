@@ -13,11 +13,9 @@
 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/906.gif"/>
 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/133.gif"/>
 
-# Pokemon Math Hunter
+# Pokemon Battle
 
-**Answer maths questions. Catch Pokemon. Fill your Pokedex.**
-
-**[Play now at danklose.xyz/kids-math](https://danklose.xyz/kids-math/)**
+**Pick your team. Solve the maths. Win the battle.**
 
 </div>
 
@@ -25,9 +23,9 @@
 
 ## What is it?
 
-A maths game where every correct answer earns you a Pokeball — and every Pokeball is a chance to catch one of **1003 animated Pokemon** from all 9 generations.
+A turn-based Pokemon battle game where maths is your weapon. Each time your Pokemon attacks, a maths challenge appears — answer it correctly to deal full damage, get it wrong and your move is weakened. The CPU fights back, so you need to be both quick and accurate to win.
 
-Get it right and the Pokemon is yours. Get it wrong and it breaks free.
+Type effectiveness is fully modelled — super effective hits deal double damage, and not very effective hits deal half.
 
 ---
 
@@ -36,12 +34,12 @@ Get it right and the Pokemon is yours. Get it wrong and it breaks free.
 ```
   1. Enter your trainer name
   2. Pick a difficulty
-  3. A wild Pokemon appears!
-  4. Solve the maths problem to catch it
-  5. Fill your Pokedex
+  3. Choose your team of 3 Pokemon
+  4. Battle the CPU — answer maths questions to power your attacks
+  5. Faint all 3 opponent Pokemon to win
 ```
 
-The game watches how you're doing and adjusts difficulty automatically — it bumps you up when you're on a roll, and eases off if you're struggling.
+Each move has a type, category (physical or special), and PP. Stats like Attack, Defense, Sp. Atk and Sp. Def all feed into damage calculation — just like the real games.
 
 ---
 
@@ -49,9 +47,11 @@ The game watches how you're doing and adjusts difficulty automatically — it bu
 
 | | Ball | Level | Maths |
 |-|------|-------|-------|
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/129.gif) | Poke Ball | Easy | Addition and subtraction, small numbers |
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/147.gif) | Great Ball | Medium | Bigger numbers, multiply and divide |
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/149.gif) | Ultra Ball | Hard | All operators, harder numbers |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/129.gif) | Poke Ball | Easy | Addition and subtraction, answers up to 20 |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/147.gif) | Great Ball | Medium | Addition and subtraction, answers up to 100 |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/149.gif) | Ultra Ball | Hard | All operators, answers up to 1000 |
+
+Harder difficulties also give the CPU a stat boost, so wrong answers hurt more.
 
 ---
 
@@ -59,17 +59,15 @@ The game watches how you're doing and adjusts difficulty automatically — it bu
 
 | | |
 |-|-|
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/151.gif) | **1003 animated Pokemon** — Gen 1 through Gen 9 |
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/197.gif) | **Pokedex** — tap any caught Pokemon to see types, stats, abilities and moves |
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/196.gif) | **Adaptive difficulty** — adjusts based on your accuracy |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/151.gif) | **1000+ animated Pokemon** — Gen 1 through Gen 9 |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/197.gif) | **Full type chart** — 18 types, super effective and resistances all modelled |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/196.gif) | **Real moves and stats** — power, PP, physical vs special, per-Pokemon movesets |
 | ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/175.gif) | **Multiple trainers** — each player has their own save, stored locally |
 | ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/52.gif) | **Works offline** — no account, no login, everything in the browser |
 
 ---
 
 ## Running it
-
-### Web app
 
 ```bash
 make dev
@@ -78,14 +76,7 @@ make dev
 Or manually:
 
 ```bash
-cd backend && cargo run          # http://localhost:3000
 cd frontend && npm run dev       # http://localhost:5173
-```
-
-### Desktop app (Tauri)
-
-```bash
-make tauri-dev
 ```
 
 ---
@@ -95,9 +86,7 @@ make tauri-dev
 | Part | Tech |
 |------|------|
 | Frontend | React, Vite |
-| Backend | Rust, Axum, SQLite |
-| Desktop | Tauri |
-| Sprites | PokeAPI showdown animated GIFs |
+| Sprites | Local animated GIFs |
 | Pokemon data | [PokeAPI](https://pokeapi.co) |
 
 ---
@@ -113,6 +102,6 @@ make tauri-dev
 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/908.gif"/>
 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/249.gif"/>
 
-*Gotta catch 'em all — one sum at a time.*
+*It's super effective!*
 
 </div>
