@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka:wght@400;600;700&display=swap');
+
+:root {
+  --poke-red: #ee1515;
+  --poke-dark-red: #b71c1c;
+  --poke-yellow: #ffcb05;
+  --poke-gold: #f5a623;
+  --poke-blue: #3b4cca;
+  --poke-light-blue: #7ac7ff;
+  --poke-cream: #fff8e7;
+  --poke-green: #4caf50;
+  --poke-ink: #1c1c1c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% 20%, #cfe9ff 0%, transparent 40%),
+    radial-gradient(circle at 90% 30%, #ffe8a8 0%, transparent 40%),
+    linear-gradient(180deg, #b3e0ff 0%, #87ceeb 40%, #a8e6a0 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--poke-ink);
+  font-family: 'Fredoka', sans-serif;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(-2deg); }
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   App nav
+   ============================================================ */
+.app-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+
+.nav-dex-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.65rem;
+  background: var(--poke-red);
+  color: #fff;
+  border: 3px solid var(--poke-ink);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--poke-ink);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.1s;
+}
+.nav-dex-btn:hover { transform: translateY(-1px); }
+
+.nav-dex-count {
+  background: var(--poke-yellow);
+  color: var(--poke-ink);
+  font-size: 0.6rem;
+  font-weight: 900;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--poke-ink);
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

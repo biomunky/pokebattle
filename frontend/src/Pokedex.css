@@ -1,0 +1,346 @@
+/* ============================================================
+   Pokédex overlay
+   ============================================================ */
+.dex-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 300;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.dex-panel {
+  background: var(--poke-cream);
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 1.5rem 1rem;
+  background: var(--poke-red);
+  border-bottom: 4px solid var(--poke-ink);
+  flex-shrink: 0;
+}
+
+.dex-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.1rem;
+  color: var(--poke-yellow);
+  -webkit-text-stroke: 1.5px var(--poke-ink);
+  margin-bottom: 0.5rem;
+}
+
+.dex-progress-bar {
+  width: 200px;
+  height: 10px;
+  background: rgba(0,0,0,0.3);
+  border: 2px solid var(--poke-ink);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.3rem;
+}
+
+.dex-progress-fill {
+  height: 100%;
+  background: var(--poke-yellow);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.dex-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+
+.dex-close-btn {
+  background: var(--poke-ink);
+  border: 3px solid var(--poke-cream);
+  color: #fff;
+  font-size: 1.1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.dex-close-btn:hover { transform: rotate(90deg); }
+
+.dex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 0.5rem;
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dex-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  border: 2px solid var(--poke-ink);
+  border-radius: 10px;
+  padding: 0.4rem 0.3rem;
+  background: #fff;
+  box-shadow: 0 2px 0 var(--poke-ink);
+}
+
+.dex-cell-caught {
+  background: #fffaf0;
+}
+
+.dex-cell-clickable {
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.dex-cell-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 var(--poke-ink);
+}
+
+.dex-cell-unseen {
+  background: #eef0f2;
+  opacity: 0.7;
+}
+
+.dex-cell-img {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dex-img {
+  max-width: 100%;
+  max-height: 100%;
+  image-rendering: pixelated;
+}
+
+.dex-img-unseen {
+  filter: brightness(0) saturate(0) opacity(0.3);
+}
+
+.dex-cell-num {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  color: #999;
+}
+
+.dex-cell-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: capitalize;
+  line-height: 1.2;
+  color: var(--poke-ink);
+  min-height: 1.4em;
+}
+
+.dex-cell-unseen .dex-cell-name {
+  color: #aaa;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   Detail panel
+   ============================================================ */
+.dex-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+  padding: 1rem;
+}
+
+.dex-detail {
+  position: relative;
+  background: var(--poke-cream);
+  border: 4px solid var(--poke-ink);
+  border-radius: 24px;
+  box-shadow: 0 10px 0 var(--poke-ink);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  animation: scaleIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.dex-detail-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--poke-ink);
+  color: #fff;
+  border: 2px solid var(--poke-cream);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  z-index: 1;
+}
+.dex-detail-close:hover { transform: rotate(90deg); }
+
+.dex-detail-header {
+  background: var(--detail-color, #A8A77A);
+  padding: 1.2rem 1.2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dex-detail-num {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  color: rgba(0,0,0,0.45);
+}
+
+.dex-detail-name {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+  text-transform: capitalize;
+  line-height: 1.4;
+}
+
+.dex-detail-types {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.dex-detail-type {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.5);
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}
+
+.dex-detail-body {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.2rem 1.2rem;
+  align-items: flex-start;
+}
+
+.dex-detail-sprite-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.dex-detail-sprite {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 4px 0 rgba(0,0,0,0.15));
+  animation: float 3s ease-in-out infinite;
+}
+
+.dex-detail-measures {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.dex-measure {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.05);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+}
+
+.dex-measure-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dex-measure-val {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  color: var(--poke-ink);
+}
+
+.dex-measure-total {
+  color: var(--poke-blue);
+}
+
+.dex-detail-stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.dex-stat-row {
+  display: grid;
+  grid-template-columns: 44px 28px 1fr;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dex-stat-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #666;
+  text-align: right;
+}
+
+.dex-stat-val {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  color: var(--poke-ink);
+  text-align: right;
+}
+
+.dex-stat-track {
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1.5px solid rgba(0,0,0,0.1);
+}
+
+.dex-stat-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
