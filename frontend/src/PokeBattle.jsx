@@ -77,7 +77,7 @@ const DIFFICULTY = {
   },
   greatball: {
     label: 'Great Ball',
-    desc: '+ and − answers up to 100',
+    desc: '+ − × ÷ integer answers up to 100',
     ball: ballGreat,
     cpuBias: 0,
     cpuWindow: 80,
@@ -121,14 +121,26 @@ function generateMathChallenge(difficulty = 'pokeball') {
       answer = n1 - n2; op = '-'
     }
   } else if (difficulty === 'greatball') {
-    if (Math.random() < 0.5) {
+    const pick = Math.floor(Math.random() * 4)
+    if (pick === 0) {
       n1 = Math.floor(Math.random() * 90) + 1
       n2 = Math.floor(Math.random() * (100 - n1)) + 1
       answer = n1 + n2; op = '+'
-    } else {
+    } else if (pick === 1) {
       n1 = Math.floor(Math.random() * 98) + 2
       n2 = Math.floor(Math.random() * (n1 - 1)) + 1
       answer = n1 - n2; op = '-'
+    } else if (pick === 2) {
+      // × — times tables 2–12
+      n1 = Math.floor(Math.random() * 11) + 2
+      n2 = Math.floor(Math.random() * 11) + 2
+      answer = n1 * n2; op = '×'
+    } else {
+      // ÷ — guaranteed integer result: build from quotient × divisor
+      answer = Math.floor(Math.random() * 19) + 2  // quotient 2–20
+      n2     = Math.floor(Math.random() * 11) + 2  // divisor 2–12
+      n1     = answer * n2                          // dividend
+      op = '÷'
     }
   } else {
     const pick = Math.floor(Math.random() * 4)
