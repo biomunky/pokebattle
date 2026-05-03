@@ -17,6 +17,8 @@
 
 **Pick your team. Solve the maths. Win the battle.**
 
+🎮 **[Play now at danklose.xyz/pokebattle](https://danklose.xyz/pokebattle/)**
+
 </div>
 
 ---
@@ -63,7 +65,7 @@ Harder difficulties also give the CPU a stat boost, so wrong answers hurt more.
 | ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/197.gif) | **Full type chart** — 18 types, super effective and resistances all modelled |
 | ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/196.gif) | **Real moves and stats** — power, PP, physical vs special, per-Pokemon movesets |
 | ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/175.gif) | **Multiple trainers** — each player has their own save, stored locally |
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/52.gif) | **Works offline** — no account, no login, everything in the browser |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/52.gif) | **Persistent saves** — Pokédex and battle history stored in SQLite locally, localStorage on the web |
 
 ---
 
@@ -86,6 +88,7 @@ cd frontend && npm run dev       # http://localhost:5173
 | Part | Tech |
 |------|------|
 | Frontend | React, Vite |
+| Backend (local) | Rust, Axum, SQLite |
 | Sprites | Local animated GIFs |
 | Pokemon data | [PokeAPI](https://pokeapi.co) |
 
