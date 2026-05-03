@@ -1057,27 +1057,50 @@
   margin-bottom: 1.25rem;
 }
 
-.swing-choices {
+.swing-answer-form {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.6rem;
   justify-content: center;
+  align-items: stretch;
 }
 
-.swing-choice-btn {
+.swing-answer-input {
   font-family: 'Press Start 2P', cursive;
-  font-size: 1rem;
-  background: #fff;
-  color: var(--poke-ink);
+  font-size: 1.4rem;
+  width: 7rem;
+  text-align: center;
+  padding: 0.6rem 0.5rem;
   border: 3px solid var(--poke-ink);
   border-radius: 12px;
-  padding: 0.75rem 1.1rem;
+  background: #fff;
+  color: var(--poke-ink);
+  box-shadow: 0 4px 0 var(--poke-ink);
+  outline: none;
+  /* hide browser spinner arrows */
+  -moz-appearance: textfield;
+}
+.swing-answer-input::-webkit-outer-spin-button,
+.swing-answer-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.swing-answer-input:focus {
+  border-color: var(--poke-blue);
+  box-shadow: 0 4px 0 var(--poke-blue);
+}
+
+.swing-answer-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.9rem;
+  background: var(--poke-red);
+  color: #fff;
+  border: 3px solid var(--poke-ink);
+  border-radius: 12px;
+  padding: 0.6rem 1.2rem;
   cursor: pointer;
   box-shadow: 0 6px 0 var(--poke-ink);
   transition: all 0.12s ease;
-  min-width: 60px;
 }
-.swing-choice-btn:hover  { background: var(--poke-yellow); transform: translateY(-2px); box-shadow: 0 8px 0 var(--poke-ink); }
-.swing-choice-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--poke-ink); }
+.swing-answer-btn:hover:not(:disabled)  { background: var(--poke-dark-red); transform: translateY(-2px); box-shadow: 0 8px 0 var(--poke-ink); }
+.swing-answer-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 3px 0 var(--poke-ink); }
+.swing-answer-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* Special math modal variant */
 .swing-modal-special {
@@ -1095,9 +1118,14 @@
   border-radius: 18px 18px 0 0;
 }
 
-.swing-modal-special .swing-choice-btn {
+.swing-modal-special .swing-answer-btn {
+  background: var(--poke-blue);
   border-color: var(--poke-yellow);
   box-shadow: 0 6px 0 #c8a000;
+}
+.swing-modal-special .swing-answer-input:focus {
+  border-color: var(--poke-yellow);
+  box-shadow: 0 4px 0 #c8a000;
 }
 
 /* ============================================================

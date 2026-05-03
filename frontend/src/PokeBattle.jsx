@@ -93,23 +93,18 @@ const DIFFICULTY = {
 
 function generateMathChallenge(difficulty = 'pokeball') {
   let n1, n2, answer, op
-  let wrongs = []
 
   if (difficulty === 'pokeball') {
-    // + and − with answer in [1, 20]
     if (Math.random() < 0.5) {
-      n1 = Math.floor(Math.random() * 10) + 1         // 1–10
-      n2 = Math.floor(Math.random() * (20 - n1)) + 1  // 1–(20-n1)
+      n1 = Math.floor(Math.random() * 10) + 1
+      n2 = Math.floor(Math.random() * (20 - n1)) + 1
       answer = n1 + n2; op = '+'
     } else {
-      n1 = Math.floor(Math.random() * 18) + 2         // 2–19
-      n2 = Math.floor(Math.random() * (n1 - 1)) + 1   // 1–(n1-1)
+      n1 = Math.floor(Math.random() * 18) + 2
+      n2 = Math.floor(Math.random() * (n1 - 1)) + 1
       answer = n1 - n2; op = '-'
     }
-    wrongs = twoWrongs(answer, 3, 1, 20)
-
   } else if (difficulty === 'greatball') {
-    // + and − with answer in [1, 100]
     if (Math.random() < 0.5) {
       n1 = Math.floor(Math.random() * 90) + 1
       n2 = Math.floor(Math.random() * (100 - n1)) + 1
@@ -119,58 +114,29 @@ function generateMathChallenge(difficulty = 'pokeball') {
       n2 = Math.floor(Math.random() * (n1 - 1)) + 1
       answer = n1 - n2; op = '-'
     }
-    wrongs = twoWrongs(answer, 15, 1, 100)
-
   } else {
-    // Ultra Ball: +, −, ×, ÷ with answer in [1, 1000]
     const pick = Math.floor(Math.random() * 4)
     if (pick === 0) {
       n1 = Math.floor(Math.random() * 900) + 1
       n2 = Math.floor(Math.random() * (1000 - n1)) + 1
       answer = n1 + n2; op = '+'
-      wrongs = twoWrongs(answer, 100, 1, 1000)
     } else if (pick === 1) {
       n1 = Math.floor(Math.random() * 998) + 2
       n2 = Math.floor(Math.random() * (n1 - 1)) + 1
       answer = n1 - n2; op = '-'
-      wrongs = twoWrongs(answer, 100, 1, 1000)
     } else if (pick === 2) {
-      // × — pick factors so product ≤ 1000, use neighbouring products as wrong answers
-      n1 = Math.floor(Math.random() * 19) + 2          // 2–20
+      n1 = Math.floor(Math.random() * 19) + 2
       n2 = Math.floor(Math.random() * Math.min(49, Math.floor(1000 / n1))) + 2
       answer = n1 * n2; op = '×'
-      const w1 = n1 * (n2 + 1)
-      const w2 = n1 * (n2 - 1)
-      wrongs = w2 > 0 ? [w1, w2] : [w1, n1 * (n2 + 2)]
     } else {
-      // ÷ — generate clean division: answer × divisor ≤ 1000
-      answer = Math.floor(Math.random() * 49) + 2      // quotient 2–50
-      n2     = Math.floor(Math.random() * 19) + 2      // divisor 2–20
-      n1     = answer * n2                              // dividend
+      answer = Math.floor(Math.random() * 49) + 2
+      n2     = Math.floor(Math.random() * 19) + 2
+      n1     = answer * n2
       op = '÷'
-      wrongs = twoWrongs(answer, 5, 1, 200)
     }
   }
 
-  return {
-    question: `${n1} ${op} ${n2}`,
-    answer,
-    choices: shuffle([answer, ...wrongs.slice(0, 2)]),
-  }
-}
-
-function twoWrongs(answer, spread, min, max) {
-  const out = new Set()
-  let attempts = 0
-  while (out.size < 2 && attempts < 80) {
-    const delta = Math.floor(Math.random() * spread) + 1
-    const c = answer + (Math.random() < 0.5 ? delta : -delta)
-    if (c !== answer && c >= min && c <= max) out.add(c)
-    attempts++
-  }
-  // fallback if range is tight
-  if (out.size < 2) out.add(answer + (out.size === 0 ? 1 : -1))
-  return [...out]
+  return { question: `${n1} ${op} ${n2}`, answer }
 }
 
 function pickCpuMove(id) {
@@ -247,6 +213,7 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
   const [cpuIdx, setCpuIdx] = useState(0)
   const [chosenMove, setChosenMove] = useState(null)
   const [mathChallenge, setMathChallenge] = useState(null)
+  const [mathInput, setMathInput] = useState('')
   const [gameResult, setGameResult] = useState(null)
   const [battleLog, setBattleLog] = useState([])
   const [correctAnswers, setCorrectAnswers] = useState(0)
@@ -315,7 +282,15 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
     if (boosted) setSpecialUsed(s => s + 1)
     setChosenMove({ ...move, boosted })
     setMathChallenge(generateMathChallenge(difficulty))
+    setMathInput('')
     setPhase('math')
+  }
+
+  const handleMathSubmit = (e) => {
+    e.preventDefault()
+    const parsed = parseInt(mathInput, 10)
+    if (isNaN(parsed)) return
+    handleMathAnswer(parsed)
   }
 
   const handleMathAnswer = (chosen) => {
@@ -748,11 +723,21 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
             </div>
             <div className="swing-intro">Answer correctly for full damage!</div>
             <div className="swing-question">{mathChallenge.question} = ?</div>
-            <div className="swing-choices">
-              {mathChallenge.choices.map(c => (
-                <button key={c} type="button" className="swing-choice-btn" onClick={() => handleMathAnswer(c)}>{c}</button>
-              ))}
-            </div>
+            <form className="swing-answer-form" onSubmit={handleMathSubmit}>
+              <input
+                className="swing-answer-input"
+                type="number"
+                inputMode="numeric"
+                value={mathInput}
+                onChange={e => setMathInput(e.target.value)}
+                autoFocus
+                autoComplete="off"
+                placeholder="?"
+              />
+              <button type="submit" className="swing-answer-btn" disabled={mathInput === ''}>
+                GO!
+              </button>
+            </form>
           </div>
         </div>
       )}
