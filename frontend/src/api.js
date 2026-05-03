@@ -57,8 +57,12 @@ export async function logAnswer(sessionId, username, difficulty, question, corre
   })
 }
 
-export async function endBattle(sessionId, result) {
-  return post('/battle/end', { session_id: sessionId, result })
+export async function endBattle(sessionId, result, teamIds = []) {
+  return post('/battle/end', { session_id: sessionId, result, team_ids: teamIds })
+}
+
+export async function getPokemonWins(username) {
+  return get(`/wins/${encodeURIComponent(username)}`)
 }
 
 export async function getStats(username) {

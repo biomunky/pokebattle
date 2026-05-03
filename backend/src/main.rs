@@ -72,6 +72,7 @@ struct LogAnswerRequest {
 struct EndBattleRequest {
     session_id: String,
     result: String,
+    team_ids: Option<Vec<i64>>,
 }
 
 #[derive(Serialize, sqlx::FromRow)]
@@ -79,6 +80,17 @@ struct StatRow {
     difficulty: String,
     total: i64,
     correct: i64,
+}
+
+#[derive(Serialize, sqlx::FromRow)]
+struct WinsRow {
+    pokemon_id: i64,
+    wins: i64,
+}
+
+#[derive(Serialize)]
+struct WinsResponse {
+    wins: Vec<WinsRow>,
 }
 
 async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
@@ -129,6 +141,18 @@ async fn init_db(pool: &SqlitePool) -> Result<(), sqlx::Error> {
             is_correct BOOLEAN NOT NULL,
             answered_at TEXT NOT NULL,
             FOREIGN KEY (session_id) REFERENCES battle_sessions(id)
+        )",
+    )
+    .execute(pool)
+    .await?;
+
+    sqlx::query(
+        "CREATE TABLE IF NOT EXISTS pokemon_wins (
+            username TEXT NOT NULL,
+            pokemon_id INTEGER NOT NULL,
+            wins INTEGER NOT NULL DEFAULT 0,
+            PRIMARY KEY (username, pokemon_id),
+            FOREIGN KEY (username) REFERENCES players(username)
         )",
     )
     .execute(pool)
@@ -260,7 +284,47 @@ async fn handle_end_battle(
     .execute(pool.as_ref())
     .await
     .ok();
+
+    if req.result == "win" {
+        if let Some(team_ids) = &req.team_ids {
+            let row: Option<(String,)> =
+                sqlx::query_as("SELECT username FROM battle_sessions WHERE id = ?")
+                    .bind(&req.session_id)
+                    .fetch_optional(pool.as_ref())
+                    .await
+                    .unwrap_or(None);
+
+            if let Some((username,)) = row {
+                for pokemon_id in team_ids {
+                    sqlx::query(
+                        "INSERT INTO pokemon_wins (username, pokemon_id, wins) VALUES (?, ?, 1)
+                         ON CONFLICT (username, pokemon_id) DO UPDATE SET wins = wins + 1",
+                    )
+                    .bind(&username)
+                    .bind(pokemon_id)
+                    .execute(pool.as_ref())
+                    .await
+                    .ok();
+                }
+            }
+        }
+    }
+
     Json(OkResponse { ok: true })
+}
+
+async fn handle_get_wins(
+    State(pool): State<AppState>,
+    Path(username): Path<String>,
+) -> Json<WinsResponse> {
+    let wins = sqlx::query_as::<_, WinsRow>(
+        "SELECT pokemon_id, wins FROM pokemon_wins WHERE username = ?",
+    )
+    .bind(&username)
+    .fetch_all(pool.as_ref())
+    .await
+    .unwrap_or_default();
+    Json(WinsResponse { wins })
 }
 
 async fn handle_get_stats(
@@ -317,6 +381,7 @@ async fn main() {
         .route("/api/battle/start", post(handle_start_battle))
         .route("/api/battle/answer", post(handle_log_answer))
         .route("/api/battle/end", post(handle_end_battle))
+        .route("/api/wins/:username", get(handle_get_wins))
         .route("/api/stats/:username", get(handle_get_stats))
         .layer(cors)
         .with_state(state);

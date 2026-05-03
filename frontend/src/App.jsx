@@ -3,6 +3,7 @@ import './App.css'
 import PokeBattle from './PokeBattle'
 import Pokedex from './Pokedex'
 import { getDexCount, initDex } from './pokedexStore'
+import { initWins } from './winsStore'
 import { checkBackend, login } from './api'
 
 function LoginScreen({ onLogin }) {
@@ -17,7 +18,10 @@ function LoginScreen({ onLogin }) {
     try {
       const backendMode = await checkBackend()
       if (backendMode) await login(trimmed)
-      await initDex(trimmed, backendMode)
+      await Promise.all([
+        initDex(trimmed, backendMode),
+        initWins(trimmed, backendMode),
+      ])
       onLogin(trimmed, backendMode)
     } finally {
       setLoading(false)

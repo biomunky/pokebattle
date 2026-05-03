@@ -4,7 +4,9 @@ import pokemonStatsData from './pokemonStats.json'
 import pokemonMovesAbilitiesData from './pokemonMovesAbilities.json'
 import { getTypeMultiplier, typeEffectivenessLabel } from './typeChart'
 import { catchPokemon, loadRoster, releasePokemon, isStarter, STARTERS, getDexCount } from './pokedexStore'
+import { addWins } from './winsStore'
 import { startBattle, logAnswer, endBattle } from './api'
+import pokemonEvolutionsData from './pokemonEvolutions.json'
 import ballPoke  from './assets/pokemon/ball_poke.png'
 import ballGreat from './assets/pokemon/ball_great.png'
 import ballUltra from './assets/pokemon/ball_ultra.png'
@@ -89,6 +91,20 @@ const DIFFICULTY = {
     cpuWindow: 80,
     wrongMult: 0.25,
   },
+}
+
+// Walk the evolution chain `stage` steps from pokemonId (stage = wins / 10).
+// Returns the evolved ID, or null if already fully evolved.
+function getEvolutionForStage(pokemonId, wins) {
+  const stage = Math.floor(wins / 10)
+  if (stage === 0) return null
+  let current = Number(pokemonId)
+  for (let i = 0; i < stage; i++) {
+    const evos = pokemonEvolutionsData[String(current)]
+    if (!evos || evos.length === 0) return null
+    current = evos[0]
+  }
+  return current === Number(pokemonId) ? null : current
 }
 
 function generateMathChallenge(difficulty = 'pokeball') {
@@ -221,6 +237,7 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
   const [pendingFaint, setPendingFaint] = useState(null)
   const [lostPokemon, setLostPokemon] = useState([])
   const [caughtThisBattle, setCaughtThisBattle] = useState(new Set())
+  const [pendingEvolutions, setPendingEvolutions] = useState([])
 
   const prependLog = (entries) => setBattleLog(prev => [...entries, ...prev].slice(0, 25))
 
@@ -381,12 +398,29 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
     if (cpuFainted) {
       nextCpuIdx = cpuIdx + 1
       if (nextCpuIdx >= cpuTeam.length) {
-        setGameResult('win')
-        setPhase('over')
+        const teamIds = playerTeam.map(p => p.id)
+
+        // Track wins and check for evolutions
+        const milestones = addWins(teamIds)
+        const evolutions = milestones
+          .map(({ pokemonId, wins }) => ({
+            from: pokemonId,
+            to: getEvolutionForStage(pokemonId, wins),
+          }))
+          .filter(e => e.to !== null)
+        for (const { to } of evolutions) {
+          catchPokemon(to)
+          onCatch?.()
+        }
+
         if (backendMode && username && sessionIdRef.current) {
-          endBattle(sessionIdRef.current, 'win').catch(() => {})
+          endBattle(sessionIdRef.current, 'win', teamIds).catch(() => {})
           sessionIdRef.current = null
         }
+
+        setGameResult('win')
+        setPendingEvolutions(evolutions)
+        setPhase(evolutions.length > 0 ? 'evolution' : 'over')
         return
       }
       setCpuIdx(nextCpuIdx)
@@ -404,7 +438,7 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
         setGameResult('lose')
         setPhase('over')
         if (backendMode && username && sessionIdRef.current) {
-          endBattle(sessionIdRef.current, 'lose').catch(() => {})
+          endBattle(sessionIdRef.current, 'lose', playerTeam.map(p => p.id)).catch(() => {})
           sessionIdRef.current = null
         }
         return
@@ -542,6 +576,41 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
           type="button"
         >
           BATTLE!
+        </button>
+      </div>
+    )
+  }
+
+  // ── Evolution screen ──────────────────────────────────────────────
+  if (phase === 'evolution') {
+    return (
+      <div className="battle-screen evolution-screen">
+        <div className="evo-header">
+          <span className="evo-flash">✨</span>
+          <h1 className="evo-title">YOUR POKÉMON EVOLVED!</h1>
+          <span className="evo-flash">✨</span>
+        </div>
+
+        <div className="evo-cards">
+          {pendingEvolutions.map(({ from, to }) => (
+            <div key={`${from}-${to}`} className="evo-card">
+              <div className="evo-poke evo-poke-from">
+                {SPRITES[from] && <img src={SPRITES[from]} alt={POKEMON_NAMES[from] ?? `#${from}`} className="evo-sprite evo-sprite-from" />}
+                <span className="evo-poke-name">{POKEMON_NAMES[from] ?? `#${from}`}</span>
+              </div>
+              <div className="evo-arrow">→</div>
+              <div className="evo-poke evo-poke-to">
+                {SPRITES[to] && <img src={SPRITES[to]} alt={POKEMON_NAMES[to] ?? `#${to}`} className="evo-sprite evo-sprite-to" />}
+                <span className="evo-poke-name">{POKEMON_NAMES[to] ?? `#${to}`}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="evo-sub">Both forms added to your Pokédex!</p>
+
+        <button className="title-start-btn" onClick={() => setPhase('over')} type="button">
+          AWESOME!
         </button>
       </div>
     )
