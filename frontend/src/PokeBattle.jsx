@@ -358,14 +358,19 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
     setPlayerTeam(t => t.map((p, i) => i === playerIdx ? { ...p, hp: newPlayerHp } : p))
     setCpuTeam(t => t.map((p, i) => i === cpuIdx ? { ...p, hp: newCpuHp } : p))
 
-    if (newCpuHp === 0) {
+    if (newCpuHp === 0 && mathCorrect) {
       catchPokemon(cpuPoke.id)
       setCaughtThisBattle(prev => new Set([...prev, cpuPoke.id]))
       onCatch?.()
     }
 
     const entries = []
-    if (newCpuHp === 0) entries.push(logEntry('caught', `🎉 ${cName} fainted! Caught!`))
+    if (newCpuHp === 0) {
+      entries.push(mathCorrect
+        ? logEntry('caught', `🎉 ${cName} fainted! Caught!`)
+        : logEntry('fainted', `${cName} fainted! Wrong answer — not caught.`)
+      )
+    }
     if (newPlayerHp === 0) entries.push(logEntry('fainted', `💔 ${pName} fainted!`))
 
     if (cpuMove) {
@@ -430,7 +435,6 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
     if (playerFainted) {
       nextPlayerIdx = playerIdx + 1
       if (nextPlayerIdx >= playerTeam.length) {
-        // Player loses — release non-starters from their team, but keep anything caught this battle
         const teamIds = playerTeam.map(p => p.id)
         const lost = teamIds.filter(id => !isStarter(id) && !caughtThisBattle.has(id))
         setLostPokemon(lost)
@@ -438,7 +442,7 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
         setGameResult('lose')
         setPhase('over')
         if (backendMode && username && sessionIdRef.current) {
-          endBattle(sessionIdRef.current, 'lose', playerTeam.map(p => p.id)).catch(() => {})
+          endBattle(sessionIdRef.current, 'lose', teamIds).catch(() => {})
           sessionIdRef.current = null
         }
         return
@@ -618,7 +622,7 @@ export default function PokeBattle({ username, backendMode, onCatch, onShowDex }
 
   // ── Game over ─────────────────────────────────────────────────────
   if (phase === 'over') {
-    const caughtCount = cpuTeam.filter(p => p.hp === 0).length
+    const caughtCount = caughtThisBattle.size
     return (
       <div className="battle-screen battle-over">
         <h1 className="battle-title">{gameResult === 'win' ? 'YOU WIN!' : 'YOU LOSE!'}</h1>

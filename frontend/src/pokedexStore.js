@@ -16,7 +16,16 @@ export async function initDex(username, backendMode) {
   if (backendMode) {
     try {
       const data = await getPokedex(username)
-      _dex = new Set(data.pokemon_ids.map(Number))
+      const backendSet = new Set(data.pokemon_ids.map(Number))
+      const localSet = _loadFromStorage()
+      // Merge: backend is authoritative for releases (deleted items won't be in
+      // localStorage since releasePokemon always saves there first), but preserve
+      // anything caught locally that failed to sync to the backend.
+      _dex = new Set([...backendSet, ...localSet])
+      const localOnly = [...localSet].filter(id => !backendSet.has(id))
+      if (localOnly.length > 0) {
+        catchPokemonAPI(username, localOnly).catch(() => {})
+      }
     } catch {
       _dex = _loadFromStorage()
     }
@@ -28,14 +37,12 @@ export async function initDex(username, backendMode) {
   const missing = STARTERS.filter(id => !_dex.has(id))
   if (missing.length > 0) {
     for (const id of missing) _dex.add(id)
-    _saveToStorage(_dex)
     if (backendMode && username) {
       catchPokemonAPI(username, STARTERS).catch(() => {})
     }
-  } else {
-    // Always keep localStorage in sync with the in-memory dex
-    _saveToStorage(_dex)
   }
+  // Always write back so localStorage matches the merged in-memory state
+  _saveToStorage(_dex)
 
   return _dex
 }
