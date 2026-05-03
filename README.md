@@ -50,7 +50,7 @@ Each move has a type, category (physical or special), and PP. Stats like Attack,
 | | Ball | Level | Maths |
 |-|------|-------|-------|
 | ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/129.gif) | Poke Ball | Easy | Addition and subtraction, answers up to 20 |
-| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/147.gif) | Great Ball | Medium | Addition and subtraction, answers up to 100 |
+| ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/147.gif) | Great Ball | Medium | All four operators, integer answers (times tables up to 12×12) |
 | ![](https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/149.gif) | Ultra Ball | Hard | All operators, answers up to 1000 |
 
 Harder difficulties also give the CPU a stat boost, so wrong answers hurt more.
