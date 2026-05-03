@@ -1,4 +1,6 @@
-backup_math_hunter.db
 venv
 .vscode/
 
+# Backend build artifacts and database
+backend/target/
+backend/pokebattle.db

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Fetches base stats, height, weight, and types for every Pokémon we have sprites for,
-// then writes frontend/src/pokemonStats.json so the Top Trumps game has instant access.
+// then writes frontend/src/pokemonStats.json so the Pokémon Battle game has instant access.
 
 import { readFileSync, writeFileSync } from 'fs'
 import { join, dirname } from 'path'

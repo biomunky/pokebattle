@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import pokemonNamesData from './pokemonNames.json'
 import pokemonStatsData from './pokemonStats.json'
 import pokemonMovesAbilitiesData from './pokemonMovesAbilities.json'
 import { getTypeMultiplier, typeEffectivenessLabel } from './typeChart'
 import { catchPokemon, loadRoster, releasePokemon, isStarter, STARTERS, getDexCount } from './pokedexStore'
+import { startBattle, logAnswer, endBattle } from './api'
 import ballPoke  from './assets/pokemon/ball_poke.png'
 import ballGreat from './assets/pokemon/ball_great.png'
 import ballUltra from './assets/pokemon/ball_ultra.png'
@@ -234,7 +235,8 @@ function RosterTile({ id, selected, onToggle, selectionFull }) {
   )
 }
 
-export default function PokeBattle({ onCatch, onShowDex }) {
+export default function PokeBattle({ username, backendMode, onCatch, onShowDex }) {
+  const sessionIdRef = useRef(null)
   const [difficulty, setDifficulty] = useState('pokeball')
   const [phase, setPhase] = useState('setup')
   const [roster, setRoster] = useState([])
@@ -300,6 +302,13 @@ export default function PokeBattle({ onCatch, onShowDex }) {
     setBattleLog([logEntry('event', 'Battle started!')])
     setCorrectAnswers(0); setSpecialUsed(0)
     setPhase('pick')
+
+    if (backendMode && username) {
+      sessionIdRef.current = null
+      startBattle(username, difficulty)
+        .then(data => { sessionIdRef.current = data.session_id })
+        .catch(() => {})
+    }
   }
 
   const handlePickMove = (move, boosted = false) => {
@@ -312,6 +321,19 @@ export default function PokeBattle({ onCatch, onShowDex }) {
   const handleMathAnswer = (chosen) => {
     const mathCorrect = chosen === mathChallenge.answer
     if (mathCorrect) setCorrectAnswers(c => c + 1)
+
+    if (backendMode && username && sessionIdRef.current) {
+      logAnswer(
+        sessionIdRef.current,
+        username,
+        difficulty,
+        mathChallenge.question,
+        mathChallenge.answer,
+        chosen,
+        mathCorrect,
+      ).catch(() => {})
+    }
+
     setMathChallenge(null)
 
     const playerPoke = playerTeam[playerIdx]
@@ -357,7 +379,7 @@ export default function PokeBattle({ onCatch, onShowDex }) {
     if (cpuMove) {
       const cTypeLabel = typeEffectivenessLabel(cTypeMult)
       if (cTypeLabel) entries.push(logEntry('effect-cpu', `Enemy: ${cTypeLabel}`))
-      entries.push(logEntry('cpu', `${cName} used ${cpuMove.label}! ${cpuDmg} dmg`))
+      entries.push(logEntry('cpu', `${cName} used ${cpuMove.name}! ${cpuDmg} dmg`))
     } else if (newCpuHp === 0) {
       entries.push(logEntry('event', `${cName} fainted before it could strike!`))
     }
@@ -366,7 +388,7 @@ export default function PokeBattle({ onCatch, onShowDex }) {
     if (pTypeLabel) entries.push(logEntry('effect', pTypeLabel))
     entries.push(logEntry(
       chosenMove.isSpecial ? 'special' : 'player',
-      `${pName} used ${chosenMove.label}!${chosenMove.isSpecial ? ' ✨' : ''} ${playerDmg} dmg`
+      `${pName} used ${chosenMove.name}!${chosenMove.isSpecial ? ' ✨' : ''} ${playerDmg} dmg`
     ))
     entries.push(logEntry('math', mathCorrect ? '✓ Correct! Full power!' : '✗ Wrong! Half power...'))
     prependLog(entries)
@@ -386,6 +408,10 @@ export default function PokeBattle({ onCatch, onShowDex }) {
       if (nextCpuIdx >= cpuTeam.length) {
         setGameResult('win')
         setPhase('over')
+        if (backendMode && username && sessionIdRef.current) {
+          endBattle(sessionIdRef.current, 'win').catch(() => {})
+          sessionIdRef.current = null
+        }
         return
       }
       setCpuIdx(nextCpuIdx)
@@ -402,6 +428,10 @@ export default function PokeBattle({ onCatch, onShowDex }) {
         releasePokemon(lost)
         setGameResult('lose')
         setPhase('over')
+        if (backendMode && username && sessionIdRef.current) {
+          endBattle(sessionIdRef.current, 'lose').catch(() => {})
+          sessionIdRef.current = null
+        }
         return
       }
       setPlayerIdx(nextPlayerIdx)

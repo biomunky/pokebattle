@@ -41,7 +41,7 @@
 
 .title-logo-sub {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   letter-spacing: 0.25em;
   color: var(--poke-blue);
   margin-bottom: 0.5rem;
@@ -124,7 +124,7 @@
 
 .title-starter-name {
   font-weight: 800;
-  font-size: 0.88rem;
+  font-size: 1rem;
   text-transform: capitalize;
   color: var(--poke-ink);
 }
@@ -135,7 +135,7 @@
 }
 
 .title-starter-type {
-  font-size: 0.52rem;
+  font-size: 0.65rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -160,18 +160,18 @@
 
 .title-progress-dex {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   color: var(--poke-blue);
 }
 
 .title-progress-sub {
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #666;
 }
 
 .title-tagline {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--poke-dark-red);
   max-width: 360px;
@@ -191,7 +191,7 @@
 
 .title-difficulty-label {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   color: var(--poke-ink);
   opacity: 0.6;
@@ -243,14 +243,14 @@
 
 .title-diff-name {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--diff-color, var(--poke-ink));
   text-align: center;
   line-height: 1.5;
 }
 
 .title-diff-desc {
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #666;
   text-align: center;
@@ -292,7 +292,7 @@
 }
 
 .title-hints span {
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #555;
   background: rgba(255,255,255,0.7);
@@ -444,7 +444,7 @@
 }
 
 .battle-lost-name {
-  font-size: 0.6rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #888;
   text-transform: capitalize;
@@ -539,7 +539,7 @@
 }
 
 .roster-name {
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   font-weight: 700;
   text-transform: capitalize;
   color: var(--poke-ink);
@@ -557,7 +557,7 @@
 }
 
 .roster-type-pip {
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   font-weight: 800;
   color: #fff;
   text-transform: uppercase;
@@ -592,7 +592,7 @@
    ============================================================ */
 .battle-arena {
   display: grid;
-  grid-template-columns: 1fr 170px 1fr;
+  grid-template-columns: 1fr 200px 1fr;
   gap: 0.6rem;
   background: linear-gradient(180deg, #a8d8f0 0%, #c8eada 60%, #b2dfc0 100%);
   border: 4px solid var(--poke-ink);
@@ -632,9 +632,9 @@
 
 .battle-log-header {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.45rem;
+  font-size: 0.6rem;
   text-align: center;
-  padding: 0.35rem 0.4rem;
+  padding: 0.4rem 0.4rem;
   background: rgba(0,0,0,0.18);
   color: rgba(0,0,0,0.6);
   flex-shrink: 0;
@@ -651,11 +651,11 @@
 }
 
 .log-entry {
-  font-size: 0.65rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  padding: 0.28rem 0.45rem;
+  padding: 0.32rem 0.5rem;
   border-radius: 5px;
-  line-height: 1.35;
+  line-height: 1.4;
   border: 1px solid rgba(0,0,0,0.08);
   word-break: break-word;
   animation: fadeIn 0.2s ease;
@@ -674,7 +674,7 @@
 /* ── Pokémon name ── */
 .battle-poke-name {
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   text-transform: capitalize;
   color: var(--poke-ink);
   background: rgba(255,255,255,0.7);
@@ -695,11 +695,11 @@
 
 .battle-type-chip {
   color: #fff;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 0.15rem 0.45rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 999px;
   border: 1.5px solid rgba(0,0,0,0.25);
   text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
@@ -730,7 +730,7 @@
 
 .hp-text {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   white-space: nowrap;
 }
 
@@ -793,14 +793,14 @@
 .star-empty { color: #ccc; }
 
 .meter-label {
-  font-size: 0.7rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: #666;
 }
 
 .meter-ready {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--poke-red);
   animation: pulse 1s ease-in-out infinite;
 }
@@ -837,7 +837,7 @@
 }
 
 .move-name {
-  font-size: 0.82rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--poke-ink);
   line-height: 1.2;
@@ -857,19 +857,19 @@
 }
 
 .move-type-chip {
-  font-size: 0.52rem;
+  font-size: 0.65rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #fff;
-  padding: 0.1rem 0.4rem;
+  padding: 0.12rem 0.45rem;
   border-radius: 999px;
   text-shadow: 1px 1px 0 rgba(0,0,0,0.25);
 }
 
 .move-power {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.45rem;
+  font-size: 0.6rem;
   color: var(--poke-blue);
   white-space: nowrap;
 }
@@ -883,13 +883,13 @@
 }
 
 .battle-ability-chip {
-  font-size: 0.55rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: capitalize;
   background: rgba(255,255,255,0.6);
   border: 1.5px solid rgba(0,0,0,0.15);
   border-radius: 999px;
-  padding: 0.1rem 0.4rem;
+  padding: 0.15rem 0.5rem;
   color: #444;
   letter-spacing: 0.02em;
 }
@@ -934,7 +934,7 @@
 }
 
 .special-name {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--poke-ink);
   white-space: nowrap;
@@ -944,7 +944,7 @@
 
 .special-hint {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   color: var(--poke-ink);
   opacity: 0.75;
   white-space: nowrap;
@@ -997,7 +997,7 @@
 
 .swing-header {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.75rem;
+  font-size: 0.95rem;
   color: var(--poke-yellow);
   -webkit-text-stroke: 1.5px var(--poke-red);
   text-shadow: 3px 3px 0 var(--poke-red);
@@ -1021,18 +1021,18 @@
 }
 
 .swing-move-type {
-  font-size: 0.6rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
   color: #fff;
-  padding: 0.15rem 0.5rem;
+  padding: 0.18rem 0.55rem;
   border-radius: 999px;
   text-shadow: 1px 1px 0 rgba(0,0,0,0.25);
 }
 
 .swing-move-pwr {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--poke-blue);
 }
 
@@ -1044,7 +1044,7 @@
 }
 
 .swing-intro {
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--poke-dark-red);
   margin-bottom: 1rem;
@@ -1105,14 +1105,14 @@
    ============================================================ */
 @media (max-width: 580px) {
   .battle-arena {
-    grid-template-columns: 1fr 110px 1fr;
+    grid-template-columns: 1fr 130px 1fr;
     padding: 0.6rem;
     gap: 0.4rem;
   }
   .player-sprite, .cpu-sprite { width: 72px; height: 72px; }
   .battle-title { font-size: 1rem; }
-  .battle-log-header { font-size: 0.4rem; }
-  .log-entry { font-size: 0.58rem; padding: 0.22rem 0.35rem; }
+  .battle-log-header { font-size: 0.55rem; }
+  .log-entry { font-size: 0.78rem; padding: 0.25rem 0.4rem; }
   .battle-moves { gap: 0.35rem; }
-  .move-name { font-size: 0.82rem; }
+  .move-name { font-size: 0.9rem; }
 }
