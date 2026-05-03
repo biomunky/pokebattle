@@ -179,6 +179,20 @@ body {
   margin-right: auto;
 }
 
+.nav-change-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  background: transparent;
+  color: var(--poke-ink);
+  border: 2px solid var(--poke-ink);
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+.nav-change-btn:hover { opacity: 1; }
+
 
 .nav-dex-btn {
   font-family: 'Press Start 2P', cursive;

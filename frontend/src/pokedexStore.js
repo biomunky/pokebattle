@@ -25,15 +25,16 @@ export async function initDex(username, backendMode) {
   }
 
   // Ensure starters are always present
-  let changed = false
-  for (const id of STARTERS) {
-    if (!_dex.has(id)) { _dex.add(id); changed = true }
-  }
-  if (changed) {
+  const missing = STARTERS.filter(id => !_dex.has(id))
+  if (missing.length > 0) {
+    for (const id of missing) _dex.add(id)
     _saveToStorage(_dex)
     if (backendMode && username) {
       catchPokemonAPI(username, STARTERS).catch(() => {})
     }
+  } else {
+    // Always keep localStorage in sync with the in-memory dex
+    _saveToStorage(_dex)
   }
 
   return _dex
@@ -57,8 +58,10 @@ function _saveToStorage(dex) {
 }
 
 export function loadDex() {
-  if (_dex !== null) return _dex
-  return _loadFromStorage()
+  const dex = _dex !== null ? _dex : _loadFromStorage()
+  // Starters are always owned — guarantee them even if module state was reset
+  for (const id of STARTERS) dex.add(id)
+  return dex
 }
 
 export function catchPokemon(...ids) {
@@ -102,4 +105,10 @@ export function loadRoster() {
 
 export function isStarter(id) {
   return STARTERS.includes(Number(id))
+}
+
+export function resetStore() {
+  _username = null
+  _backendMode = false
+  _dex = null
 }

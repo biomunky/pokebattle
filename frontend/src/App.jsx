@@ -2,8 +2,8 @@ import { useState } from 'react'
 import './App.css'
 import PokeBattle from './PokeBattle'
 import Pokedex from './Pokedex'
-import { getDexCount, initDex } from './pokedexStore'
-import { initWins } from './winsStore'
+import { getDexCount, initDex, resetStore } from './pokedexStore'
+import { initWins, resetWinsStore } from './winsStore'
 import { checkBackend, login } from './api'
 
 function LoginScreen({ onLogin }) {
@@ -74,6 +74,15 @@ function App() {
     setBackendMode(isBacked)
   }
 
+  const handleChangeTrainer = () => {
+    resetStore()
+    resetWinsStore()
+    setUsername(null)
+    setBackendMode(false)
+    setShowDex(false)
+    setDexVersion(0)
+  }
+
   const dexCount = getDexCount()
   const bumpDex = () => setDexVersion(v => v + 1)
 
@@ -85,6 +94,9 @@ function App() {
     <div className="app">
       <div className="app-nav">
         <span className="nav-trainer">🎮 {username}</span>
+        <button className="nav-change-btn" onClick={handleChangeTrainer} type="button">
+          Change Trainer
+        </button>
         <button className="nav-dex-btn" onClick={() => setShowDex(true)} type="button">
           Pokédex {dexCount > 0 && <span className="nav-dex-count">{dexCount}</span>}
         </button>

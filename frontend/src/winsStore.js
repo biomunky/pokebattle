@@ -50,6 +50,12 @@ export function getWins(pokemonId) {
   return _wins.get(Number(pokemonId)) ?? 0
 }
 
+export function resetWinsStore() {
+  _username = null
+  _backendMode = false
+  _wins = null
+}
+
 // Increments wins for each Pokémon in the list.
 // Returns array of { pokemonId, wins } for those that just crossed a 10-win milestone.
 export function addWins(pokemonIds) {
